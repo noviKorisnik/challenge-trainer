@@ -1,0 +1,64 @@
+<div class="challenge-generator">
+  <div class="generator-form">
+    <div class="form-group">
+      <label for="category">Category *</label>
+      <select 
+        id="category" 
+        [(ngModel)]="selectedCategory"
+        (change)="onCategoryChange()"
+        class="select-field"
+      >
+        <option value="">— Select category —</option>
+        @for (cat of categories; track cat.category) {
+          <option [value]="cat.category">{{ cat.category }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="topic">Topic</label>
+      <select 
+        id="topic" 
+        [(ngModel)]="selectedTopic"
+        (change)="onTopicChange()"
+        class="select-field"
+        [disabled]="!selectedCategory()"
+      >
+        <option value="">— All topics —</option>
+        @for (topic of availableTopics(); track topic) {
+          <option [value]="topic">{{ topic }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="difficulty">Difficulty</label>
+      <select 
+        id="difficulty" 
+        [(ngModel)]="selectedDifficulty"
+        (change)="onDifficultyChange()"
+        class="select-field"
+      >
+        @for (diff of difficulties; track diff) {
+          <option [value]="diff">{{ diff }}</option>
+        }
+      </select>
+    </div>
+
+    <button 
+      class="btn btn-primary generate-btn"
+      (click)="generateChallenge()"
+      [disabled]="!selectedCategory() || isGenerating()"
+    >
+      @if (isGenerating()) {
+        ⏳ Generating...
+      } @else {
+        ⚡ Generate
+      }
+    </button>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">{{ error() }}</div>
+  }
+</div>

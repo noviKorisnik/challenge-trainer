@@ -1,0 +1,29 @@
+<div class="api-config-container">
+  <h2>API Configuration</h2>
+  
+  <p class="info">
+    Get your API key from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a>
+  </p>
+
+  <div class="form-group">
+    <label for="apiKey">Gemini API Key:</label>
+    <input 
+      id="apiKey"
+      type="password" 
+      [(ngModel)]="apiKey"
+      placeholder="Enter your API key"
+      class="input-field"
+    />
+  </div>
+
+  @if (message()) {
+    <div class="message" [class.success]="messageType() === 'success'" [class.error]="messageType() === 'error'">
+      {{ message() }}
+    </div>
+  }
+
+  <div class="button-group">
+    <button class="btn btn-primary" (click)="saveApiKey()">Save</button>
+    <button class="btn btn-secondary" (click)="clearApiKey()">Clear</button>
+  </div>
+</div>

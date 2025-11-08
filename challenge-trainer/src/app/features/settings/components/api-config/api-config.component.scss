@@ -1,0 +1,33 @@
+.api-config-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #0b1220;
+  padding: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  
+  h2 {
+    margin-top: 0;
+    color: #e6eef8;
+  }
+  
+  .info {
+    color: #93a3b8;
+    margin-bottom: 24px;
+    
+    a {
+      color: #4f9dff;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+}

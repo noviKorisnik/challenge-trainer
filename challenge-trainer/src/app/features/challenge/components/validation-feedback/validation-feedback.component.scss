@@ -1,0 +1,61 @@
+.validation-feedback {
+  background: #0b1220;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 24px;
+  
+  h3 {
+    margin: 0 0 16px 0;
+    color: #e6eef8;
+  }
+  
+  .score {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4f9dff;
+    margin-bottom: 16px;
+  }
+  
+  h4 {
+    color: #e6eef8;
+    margin: 20px 0 10px 0;
+  }
+  
+  ul {
+    margin-left: 20px;
+    
+    li {
+      margin-bottom: 8px;
+      color: #93a3b8;
+      line-height: 1.5;
+    }
+  }
+  
+  .strengths {
+    h4 {
+      color: #86efac;
+    }
+  }
+  
+  .improvements {
+    h4 {
+      color: #fca5a5;
+    }
+  }
+  
+  .alternatives {
+    h4 {
+      color: #a5b4fc;
+    }
+  }
+  
+  .complexity {
+    margin-top: 20px;
+    
+    p {
+      color: #93a3b8;
+      margin: 4px 0;
+    }
+  }
+}

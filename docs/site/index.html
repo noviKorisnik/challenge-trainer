@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>JS Challenge Trainer — Docs Viewer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- marked for markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>JS Challenge Trainer — Single Page Docs</h1>
+      <div class="header-actions">
+        <button id="open-help">Help / About</button>
+        <button id="open-key">API Key</button>
+      </div>
+    </header>
+
+    <main>
+      <aside>
+        <section class="selector">
+          <h2>Topic Selection</h2>
+          <label for="category">Category (required)</label>
+          <select id="category"><option value="">— Select category —</option></select>
+
+          <label for="topic">Topic (optional)</label>
+          <select id="topic"><option value="">— Topic (optional) —</option></select>
+
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty">
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
+          </select>
+
+          <button id="generate" disabled>Generate (demo)</button>
+        </section>
+      </aside>
+
+      <section id="content">
+        <div id="doc" class="doc">
+          <p class="loading">Loading merged docs…</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- API Key Modal -->
+    <div id="modal-key" class="modal" aria-hidden="true">
+      <div class="modal-panel">
+        <h3>Configure API Key</h3>
+        <p>Enter your Gemini (or provider) API key. Stored locally in localStorage.</p>
+        <input id="api-key-input" type="password" placeholder="Enter API key" />
+        <div class="modal-actions">
+          <button id="save-key">Save</button>
+          <button id="clear-key">Clear</button>
+          <button id="close-key">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="modal-help" class="modal" aria-hidden="true">
+      <div class="modal-panel">
+        <h3>About this merged docs viewer</h3>
+        <p>This page consolidates the repository's documentation into a single view and
+        provides a small UI for topic selection and API key setup. The API key is
+        stored locally and used by the full application (when present).</p>
+        <ul>
+          <li>API key modal auto-opens if no API key is present</li>
+          <li>Category selection is required for generate</li>
+          <li>Topic is optional (category-only selection allowed)</li>
+        </ul>
+        <div class="modal-actions">
+          <button id="close-help">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

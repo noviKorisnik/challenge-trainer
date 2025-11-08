@@ -1,0 +1,46 @@
+<div class="validation-feedback">
+  <h3>AI Feedback</h3>
+  <div class="score">Score: {{ feedback.score }}/100</div>
+  <p><strong>Overall Feedback:</strong> {{ feedback.feedback }}</p>
+  
+  @if (feedback.strengths.length > 0) {
+    <div class="strengths">
+      <h4>Strengths:</h4>
+      <ul>
+        @for (strength of feedback.strengths; track $index) {
+          <li>{{ strength }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (feedback.improvements.length > 0) {
+    <div class="improvements">
+      <h4>Areas for Improvement:</h4>
+      <ul>
+        @for (improvement of feedback.improvements; track $index) {
+          <li>{{ improvement }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (feedback.alternativeApproaches && feedback.alternativeApproaches.length > 0) {
+    <div class="alternatives">
+      <h4>Alternative Approaches:</h4>
+      <ul>
+        @for (approach of feedback.alternativeApproaches; track $index) {
+          <li>{{ approach }}</li>
+        }
+      </ul>
+    </div>
+  }
+  
+  @if (feedback.complexity) {
+    <div class="complexity">
+      <h4>Complexity Analysis:</h4>
+      <p><strong>Time:</strong> {{ feedback.complexity.time }}</p>
+      <p><strong>Space:</strong> {{ feedback.complexity.space }}</p>
+    </div>
+  }
+</div>

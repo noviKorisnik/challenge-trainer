@@ -1,0 +1,51 @@
+<div class="test-runner">
+  @if (testResults.length > 0) {
+    <div class="section-header">
+      <span class="section-title">🧪 Test Results</span>
+      <span class="test-count">{{ passedCount }}/{{ testResults.length }} passed</span>
+    </div>
+    <div class="test-results">
+      @for (result of testResults; track $index) {
+        <div class="test-result" [class.passed]="result.passed" [class.failed]="!result.passed">
+          <div class="test-header">
+            <span class="test-icon">{{ result.passed ? '✓' : '✗' }}</span>
+            <span class="test-label">Test {{ $index + 1 }}</span>
+            <span class="test-status" [class.passed]="result.passed" [class.failed]="!result.passed">
+              {{ result.passed ? 'PASSED' : 'FAILED' }}
+            </span>
+          </div>
+          <div class="test-details">
+            <div class="test-input">
+              <strong>Input:</strong> {{ formatInput(result.testCase.input) }}
+            </div>
+            @if (!result.passed) {
+              <div class="test-output">
+                <strong>Expected:</strong> <span class="expected">{{ formatOutput(result.testCase.expectedOutput) }}</span>
+              </div>
+              <div class="test-output">
+                <strong>Got:</strong> <span class="actual">{{ formatOutput(result.actualOutput) }}</span>
+              </div>
+              @if (result.error) {
+                <div class="test-error">
+                  <strong>Error:</strong> {{ result.error }}
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+      
+      @if (allTestsPassed) {
+        <div class="all-passed-message">
+          <span class="success-icon">🎉</span>
+          All {{ testResults.length }} tests passed!
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="no-results">
+      <span class="info-icon">ℹ️</span>
+      No test results yet. Click "Run Tests" to execute your code.
+    </div>
+  }
+</div>

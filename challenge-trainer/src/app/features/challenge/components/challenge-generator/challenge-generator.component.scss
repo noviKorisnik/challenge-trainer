@@ -1,0 +1,67 @@
+.challenge-generator {
+  background: #0b1220;
+  padding: 16px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .generator-form {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1.5fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      color: #93a3b8;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .select-field {
+      background: #050a14;
+      color: #e6eef8;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover:not(:disabled) {
+        border-color: rgba(79, 157, 255, 0.3);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #4f9dff;
+        box-shadow: 0 0 0 3px rgba(79, 157, 255, 0.1);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .generate-btn {
+    height: 38px;
+    padding: 0 20px;
+    white-space: nowrap;
+  }
+
+  .error-message {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 4px;
+    color: #fca5a5;
+    font-size: 14px;
+  }
+}

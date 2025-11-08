@@ -1,0 +1,89 @@
+<div class="challenge-container">
+  <!-- Compact Challenge Generator -->
+  <app-challenge-generator 
+    (challengeGenerated)="onChallengeGenerated($event)"
+  ></app-challenge-generator>
+
+  <app-error-display [error]="state.error()"></app-error-display>
+
+  @if (state.isGenerating()) {
+    <app-loading-spinner message="Generating challenge..."></app-loading-spinner>
+  }
+
+  @if (state.currentChallenge()) {
+    <!-- IDE-Style Split Layout -->
+    <div class="ide-layout">
+      <!-- Left Pane: Challenge Description & Review -->
+      <div class="left-pane">
+        <div class="tabs">
+          <button 
+            class="tab"
+            [class.active]="activeTab === 'description'"
+            (click)="activeTab = 'description'"
+          >
+            📋 Challenge
+          </button>
+          <button 
+            class="tab"
+            [class.active]="activeTab === 'review'"
+            (click)="activeTab = 'review'"
+            [disabled]="!state.validationFeedback()"
+          >
+            ✨ AI Review
+          </button>
+        </div>
+
+        <div class="tab-content">
+          @if (activeTab === 'description') {
+            <app-challenge-display [challenge]="state.currentChallenge()!"></app-challenge-display>
+          }
+          @if (activeTab === 'review' && state.validationFeedback()) {
+            @if (state.isValidating()) {
+              <app-loading-spinner message="AI is reviewing your solution..."></app-loading-spinner>
+            } @else {
+              <app-validation-feedback [feedback]="state.validationFeedback()!"></app-validation-feedback>
+            }
+          }
+        </div>
+      </div>
+
+      <!-- Right Pane: Code Editor & Tests -->
+      <div class="right-pane">
+        <!-- Code Editor -->
+        <div class="editor-section">
+          <app-code-editor 
+            [code]="state.userCode()" 
+            (codeChange)="onCodeChange($event)"
+          ></app-code-editor>
+        </div>
+
+        <!-- Test Results Panel (Bottom of editor) -->
+        <div class="test-results-section">
+          <app-test-runner
+            [testResults]="state.testResults()"
+            [isRunning]="false"
+            (runTests)="runTests()"
+          ></app-test-runner>
+        </div>
+
+        <!-- Action Buttons (Bottom row) -->
+        <div class="action-bar">
+          <button class="btn btn-secondary" (click)="runTests()">
+            ▶ Run Tests
+          </button>
+          <button 
+            class="btn btn-primary" 
+            (click)="submitForReview()"
+            [disabled]="state.isValidating()"
+          >
+            @if (state.isValidating()) {
+              Validating...
+            } @else {
+              ✓ Submit for Review
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

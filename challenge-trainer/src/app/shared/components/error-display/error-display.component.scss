@@ -1,0 +1,20 @@
+.error-display {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 12px 0;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+  .error-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  
+  .error-text {
+    flex: 1;
+  }
+}

@@ -1,0 +1,29 @@
+<div class="challenge-display">
+  <h2>{{ challenge.title }}</h2>
+  <p class="description">{{ challenge.description }}</p>
+  
+  @if (challenge.examples.length > 0) {
+    <div class="examples">
+      <h4>Examples:</h4>
+      @for (example of challenge.examples; track $index) {
+        <div class="example">
+          <strong>Input:</strong> {{ example.input }}<br>
+          <strong>Output:</strong> {{ example.output }}<br>
+          <em>{{ example.explanation }}</em>
+        </div>
+      }
+    </div>
+  }
+
+  @if (challenge.constraints.length > 0) {
+    <div class="constraints">
+      <h4>Constraints:</h4>
+      <ul>
+        @for (constraint of challenge.constraints; track $index) {
+          <li>{{ constraint }}</li>
+        }
+      </ul>
+    </div>
+  }
+</div>
+
