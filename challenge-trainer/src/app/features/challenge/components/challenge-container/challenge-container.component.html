@@ -1,81 +1,99 @@
 <div class="challenge-container">
-  <!-- Compact Challenge Generator -->
-  <app-challenge-generator 
-    (challengeGenerated)="onChallengeGenerated($event)"
-  ></app-challenge-generator>
-
   <app-error-display [error]="state.error()"></app-error-display>
 
   @if (state.isGenerating()) {
     <app-loading-spinner message="Generating challenge..."></app-loading-spinner>
   }
 
-  @if (state.currentChallenge()) {
-    <!-- IDE-Style Split Layout -->
-    <div class="ide-layout">
-      <!-- Left Pane: Challenge Description & Review -->
-      <div class="left-pane">
-        <div class="tabs">
-          <button 
-            class="tab"
-            [class.active]="activeTab === 'description'"
-            (click)="activeTab = 'description'"
-          >
-            📋 Challenge
-          </button>
-          <button 
-            class="tab"
-            [class.active]="activeTab === 'review'"
-            (click)="activeTab = 'review'"
-            [disabled]="!state.validationFeedback()"
-          >
-            ✨ AI Review
-          </button>
-        </div>
-
-        <div class="tab-content">
-          @if (activeTab === 'description') {
-            <app-challenge-display [challenge]="state.currentChallenge()!"></app-challenge-display>
-          }
-          @if (activeTab === 'review' && state.validationFeedback()) {
-            @if (state.isValidating()) {
-              <app-loading-spinner message="AI is reviewing your solution..."></app-loading-spinner>
-            } @else {
-              <app-validation-feedback [feedback]="state.validationFeedback()!"></app-validation-feedback>
-            }
-          }
-        </div>
+  <!-- Resizable Split Layout -->
+  <div class="split-layout">
+    <!-- Left Panel: Tabs for Generate/Challenge/Tests/Review -->
+    <div class="left-panel" [style.width.px]="leftPanelWidth">
+      <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'generate'" (click)="activeTab = 'generate'" [disabled]="!hasApiKey">
+          ⚡ Generate
+        </button>
+        <button class="tab" [class.active]="activeTab === 'challenge'" (click)="activeTab = 'challenge'" [disabled]="!state.currentChallenge()">
+          📋 Challenge
+        </button>
+        <button class="tab" [class.active]="activeTab === 'tests'" (click)="activeTab = 'tests'" [disabled]="state.testResults().length === 0">
+          🧪 Tests
+        </button>
+        <button class="tab" [class.active]="activeTab === 'review'" (click)="activeTab = 'review'" [disabled]="!state.validationFeedback()">
+          ✨ Review
+        </button>
+        <button class="tab" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'">
+          ⚙️ Settings
+        </button>
       </div>
 
-      <!-- Right Pane: Code Editor & Tests -->
-      <div class="right-pane">
+      <div class="tab-content">
+        @if (activeTab === 'generate') {
+          <app-challenge-generator (challengeGenerated)="onChallengeGenerated($event)"></app-challenge-generator>
+        }
+        @if (activeTab === 'challenge' && state.currentChallenge()) {
+          <app-challenge-display [challenge]="state.currentChallenge()!"></app-challenge-display>
+        }
+        @if (activeTab === 'tests') {
+          <app-test-runner [testResults]="state.testResults()" [isRunning]="false" (runTests)="runTests()"></app-test-runner>
+        }
+        @if (activeTab === 'review' && state.validationFeedback()) {
+          @if (state.isValidating()) {
+            <app-loading-spinner message="AI is reviewing your solution..."></app-loading-spinner>
+          } @else {
+            <app-validation-feedback [feedback]="state.validationFeedback()!"></app-validation-feedback>
+          }
+        }
+        @if (activeTab === 'settings') {
+          <app-api-config (apiKeySaved)="onApiKeyChange()"></app-api-config>
+        }
+      </div>
+    </div>
+
+    <!-- Resizable Divider -->
+    <div class="divider" 
+         (mousedown)="onDividerMouseDown($event)"
+         title="Drag to resize">
+    </div>
+
+    <!-- Right Panel: Code Editor -->
+    <div class="right-panel">
+      @if (!hasApiKey) {
+        <!-- No API Key State -->
+        <div class="empty-state">
+          <div class="empty-icon">🔑</div>
+          <h2>API Key Required</h2>
+          <p>Please configure your Google Gemini API key in the Settings tab to start generating challenges.</p>
+          <button class="btn btn-primary" (click)="activeTab = 'settings'">
+            Open Settings
+          </button>
+        </div>
+      } @else if (state.currentChallenge()) {
+        <!-- Challenge Info Bar -->
+        <div class="challenge-info-bar">
+          <div class="challenge-meta">
+            <span class="challenge-title">{{ state.currentChallenge()!.title }}</span>
+            <span class="challenge-badge difficulty-{{ state.currentChallenge()!.difficulty.toLowerCase() }}">
+              {{ state.currentChallenge()!.difficulty }}
+            </span>
+            <span class="challenge-topic">{{ state.currentChallenge()!.topic }}</span>
+          </div>
+          <button class="btn btn-small" (click)="quickRegenerate()" [disabled]="state.isGenerating()">
+            🔄 Regenerate
+          </button>
+        </div>
+
         <!-- Code Editor -->
         <div class="editor-section">
-          <app-code-editor 
-            [code]="state.userCode()" 
-            (codeChange)="onCodeChange($event)"
-          ></app-code-editor>
+          <app-code-editor [code]="state.userCode()" (codeChange)="onCodeChange($event)"></app-code-editor>
         </div>
 
-        <!-- Test Results Panel (Bottom of editor) -->
-        <div class="test-results-section">
-          <app-test-runner
-            [testResults]="state.testResults()"
-            [isRunning]="false"
-            (runTests)="runTests()"
-          ></app-test-runner>
-        </div>
-
-        <!-- Action Buttons (Bottom row) -->
+        <!-- Action Bar -->
         <div class="action-bar">
           <button class="btn btn-secondary" (click)="runTests()">
             ▶ Run Tests
           </button>
-          <button 
-            class="btn btn-primary" 
-            (click)="submitForReview()"
-            [disabled]="state.isValidating()"
-          >
+          <button class="btn btn-primary" (click)="submitForReview()" [disabled]="state.isValidating()">
             @if (state.isValidating()) {
               Validating...
             } @else {
@@ -83,7 +101,17 @@
             }
           </button>
         </div>
-      </div>
+      } @else {
+        <!-- Empty State -->
+        <div class="empty-state">
+          <div class="empty-icon">🎯</div>
+          <h2>Ready to Code?</h2>
+          <p>Generate a challenge to get started!</p>
+          <button class="btn btn-primary" (click)="activeTab = 'generate'">
+            ⚡ Generate Challenge
+          </button>
+        </div>
+      }
     </div>
-  }
+  </div>
 </div>

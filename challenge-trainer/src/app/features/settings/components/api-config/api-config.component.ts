@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../../core/services/config.service';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './api-config.component.scss'
 })
 export class ApiConfigComponent {
+  apiKeySaved = output<void>();
   apiKey = signal<string>('');
   message = signal<string>('');
   messageType = signal<'success' | 'error' | ''>('');
@@ -40,18 +41,15 @@ export class ApiConfigComponent {
     }
 
     this.configService.setApiKey(key);
-    this.showMessage('API key saved successfully!', 'success');
-    
-    // Redirect to home after 1 second
-    setTimeout(() => {
-      this.router.navigate(['/']);
-    }, 1000);
+    this.showMessage('API key saved successfully! You can now generate challenges.', 'success');
+    this.apiKeySaved.emit();
   }
 
   clearApiKey(): void {
     this.configService.clearApiKey();
     this.apiKey.set('');
     this.showMessage('API key cleared', 'success');
+    this.apiKeySaved.emit();
   }
 
   private showMessage(text: string, type: 'success' | 'error'): void {

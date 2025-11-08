@@ -1,14 +1,8 @@
 .challenge-generator {
-  background: #0b1220;
-  padding: 16px 20px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
   .generator-form {
-    display: grid;
-    grid-template-columns: 2fr 2fr 1.5fr auto;
-    gap: 12px;
-    align-items: end;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .form-group {
@@ -50,9 +44,8 @@
   }
 
   .generate-btn {
-    height: 38px;
-    padding: 0 20px;
-    white-space: nowrap;
+    width: 100%;
+    padding: 10px 20px;
   }
 
   .error-message {
