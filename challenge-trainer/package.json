@@ -20,7 +20,7 @@
     "@angular/router": "^18.2.0",
     "@google/generative-ai": "^0.24.1",
     "@types/marked": "^5.0.2",
-    "marked": "^16.4.1",
+    "marked": "^16.4.2",
     "monaco-editor": "^0.54.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

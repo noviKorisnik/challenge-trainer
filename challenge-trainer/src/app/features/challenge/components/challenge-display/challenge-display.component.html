@@ -1,6 +1,6 @@
 <div class="challenge-display">
   <h2>{{ challenge.title }}</h2>
-  <p class="description">{{ challenge.description }}</p>
+  <div class="description" [innerHTML]="descriptionHtml()"></div>
   
   @if (challenge.examples.length > 0) {
     <div class="examples">

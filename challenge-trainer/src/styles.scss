@@ -13,6 +13,31 @@ body {
   margin: 0;
 }
 
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b1220;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a3847;
+  border-radius: 5px;
+  
+  &:hover {
+    background: #3a4857;
+  }
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a3847 #0b1220;
+}
+
 /* Global button styles */
 .btn {
   padding: 10px 20px;

@@ -1,14 +1,17 @@
 <div class="validation-feedback">
   <h3>AI Feedback</h3>
   <div class="score">Score: {{ feedback.score }}/100</div>
-  <p><strong>Overall Feedback:</strong> {{ feedback.feedback }}</p>
+  <div class="overall-feedback">
+    <strong>Overall Feedback:</strong>
+    <div [innerHTML]="feedbackHtml()"></div>
+  </div>
   
   @if (feedback.strengths.length > 0) {
     <div class="strengths">
       <h4>Strengths:</h4>
       <ul>
-        @for (strength of feedback.strengths; track $index) {
-          <li>{{ strength }}</li>
+        @for (strength of strengthsHtml(); track $index) {
+          <li [innerHTML]="strength"></li>
         }
       </ul>
     </div>
@@ -18,8 +21,8 @@
     <div class="improvements">
       <h4>Areas for Improvement:</h4>
       <ul>
-        @for (improvement of feedback.improvements; track $index) {
-          <li>{{ improvement }}</li>
+        @for (improvement of improvementsHtml(); track $index) {
+          <li [innerHTML]="improvement"></li>
         }
       </ul>
     </div>
@@ -29,8 +32,8 @@
     <div class="alternatives">
       <h4>Alternative Approaches:</h4>
       <ul>
-        @for (approach of feedback.alternativeApproaches; track $index) {
-          <li>{{ approach }}</li>
+        @for (approach of alternativeApproachesHtml(); track $index) {
+          <li [innerHTML]="approach"></li>
         }
       </ul>
     </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChallengeGeneratorComponent } from '../challenge-generator/challenge-generator.component';
 import { ChallengeDisplayComponent } from '../challenge-display/challenge-display.component';
@@ -31,6 +31,8 @@ import { Challenge } from '../../../../core/models';
   styleUrl: './challenge-container.component.scss'
 })
 export class ChallengeContainerComponent implements OnInit {
+  @ViewChild(ChallengeGeneratorComponent) generatorComponent!: ChallengeGeneratorComponent;
+  
   activeTab: 'generate' | 'challenge' | 'tests' | 'review' | 'settings' = 'generate';
   leftPanelWidth: number = 500; // Initial width in pixels
   hasApiKey: boolean = false;
@@ -76,13 +78,9 @@ export class ChallengeContainerComponent implements OnInit {
   }
 
   quickRegenerate(): void {
-    // Re-generate with same parameters
-    const challenge = this.state.currentChallenge();
-    if (challenge) {
-      // Trigger generation through the generator component
-      this.activeTab = 'generate';
-      // Note: The actual regeneration would need to be handled by the generator component
-      // For now, just switch to the generate tab
+    // Re-generate with same parameters by calling the generator component
+    if (this.generatorComponent) {
+      this.generatorComponent.generateChallenge();
     }
   }
 
@@ -99,8 +97,9 @@ export class ChallengeContainerComponent implements OnInit {
     const deltaX = event.clientX - this.startX;
     const newWidth = this.startWidth + deltaX;
 
-    // Constrain width between 300px and 800px
-    this.leftPanelWidth = Math.max(300, Math.min(800, newWidth));
+    // Constrain width between 300px and 66% of viewport width
+    const maxWidth = window.innerWidth * 0.66;
+    this.leftPanelWidth = Math.max(300, Math.min(maxWidth, newWidth));
   }
 
   private onMouseUp(): void {
