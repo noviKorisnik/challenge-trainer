@@ -1,0 +1,13 @@
+{
+    "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+    "configurations": {
+        "challenge-trainer": {
+            "appLocation": "./challenge-trainer",
+            "apiLocation": "./api",
+            "outputLocation": "dist/challenge-trainer/browser",
+            "appBuildCommand": "npm run build",
+            "run": "npm start",
+            "appDevserverUrl": "http://localhost:4200"
+        }
+    }
+}
