@@ -1,0 +1,14 @@
+{
+    "name": "challenge-trainer-api",
+    "version": "1.0.0",
+    "description": "Azure Functions API proxy for Challenge Trainer",
+    "scripts": {
+        "start": "func start"
+    },
+    "dependencies": {
+        "@google/generative-ai": "^0.21.0"
+    },
+    "devDependencies": {
+        "@azure/functions": "^4.0.0"
+    }
+}

@@ -1,52 +1,32 @@
 import { Injectable } from '@angular/core';
-import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
-import { ConfigService } from './config.service';
+import { HttpClient } from '@angular/common/http';
 import { Challenge, ValidationResult, ExecutionResult } from '../models';
 import { AiProviderService } from './ai-provider.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeminiProviderService extends AiProviderService {
-  private genAI: GoogleGenerativeAI | null = null;
-  private model: GenerativeModel | null = null;
+  private apiUrl = '/api/gemini';
 
-  constructor(private configService: ConfigService) {
+  constructor(private http: HttpClient) {
     super();
-    this.initialize();
-  }
-
-  private initialize(): void {
-    const apiKey = this.configService.getApiKey();
-    if (apiKey) {
-      this.genAI = new GoogleGenerativeAI(apiKey);
-      this.model = this.genAI.getGenerativeModel({
-        model: 'gemini-2.5-flash',
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 8192,
-        }
-      });
-    }
   }
 
   async generateChallenge(topic: string, difficulty: string): Promise<Challenge> {
-    if (!this.model) {
-      this.initialize();
-      if (!this.model) {
-        throw new Error('Gemini API not initialized. Please configure your API key.');
-      }
-    }
-
     try {
       const prompt = this.generateChallengePrompt(topic, difficulty);
-      const result = await this.model.generateContent(prompt);
-      const response = result.response;
-      const text = response.text();
 
-      const challengeData = this.parseJSON(text);
+      const response = await firstValueFrom(
+        this.http.post<{ text: string }>(this.apiUrl, {
+          action: 'generateChallenge',
+          prompt,
+          model: 'gemini-2.5-flash'
+        })
+      );
+
+      const challengeData = this.parseJSON(response.text);
 
       return {
         ...challengeData,
@@ -66,20 +46,18 @@ export class GeminiProviderService extends AiProviderService {
     code: string,
     testResults: ExecutionResult[]
   ): Promise<ValidationResult> {
-    if (!this.model) {
-      this.initialize();
-      if (!this.model) {
-        throw new Error('Gemini API not initialized. Please configure your API key.');
-      }
-    }
-
     try {
       const prompt = this.validateSolutionPrompt(challenge, code, testResults);
-      const result = await this.model.generateContent(prompt);
-      const response = result.response;
-      const text = response.text();
 
-      return this.parseJSON(text);
+      const response = await firstValueFrom(
+        this.http.post<{ text: string }>(this.apiUrl, {
+          action: 'validateSolution',
+          prompt,
+          model: 'gemini-2.5-flash'
+        })
+      );
+
+      return this.parseJSON(response.text);
     } catch (error: any) {
       console.error('Error validating solution:', error);
       throw new Error('Failed to validate solution. Please try again.');
