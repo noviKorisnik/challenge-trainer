@@ -7,7 +7,6 @@ import { TestRunnerComponent } from '../test-runner/test-runner.component';
 import { ValidationFeedbackComponent } from '../validation-feedback/validation-feedback.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorDisplayComponent } from '../../../../shared/components/error-display/error-display.component';
-import { ApiConfigComponent } from '../../../settings/components/api-config/api-config.component';
 import { ChallengeStateService } from '../../services/challenge-state.service';
 import { CodeExecutionService } from '../../../../core/services/code-execution.service';
 import { GeminiProviderService } from '../../../../core/services/gemini-provider.service';
@@ -24,18 +23,16 @@ import { Challenge } from '../../../../core/models';
     TestRunnerComponent,
     ValidationFeedbackComponent,
     LoadingSpinnerComponent,
-    ErrorDisplayComponent,
-    ApiConfigComponent
+    ErrorDisplayComponent
   ],
   templateUrl: './challenge-container.component.html',
   styleUrl: './challenge-container.component.scss'
 })
 export class ChallengeContainerComponent implements OnInit {
   @ViewChild(ChallengeGeneratorComponent) generatorComponent!: ChallengeGeneratorComponent;
-  
-  activeTab: 'generate' | 'challenge' | 'tests' | 'review' | 'settings' = 'generate';
+
+  activeTab: 'generate' | 'challenge' | 'tests' | 'review' = 'generate';
   leftPanelWidth: number = 500; // Initial width in pixels
-  hasApiKey: boolean = false;
   private isDragging = false;
   private startX = 0;
   private startWidth = 0;
@@ -53,22 +50,7 @@ export class ChallengeContainerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if API key is configured, if not, show settings tab
-    const apiKey = localStorage.getItem('challenge_trainer_api_key');
-    this.hasApiKey = !!apiKey;
-    if (!apiKey) {
-      this.activeTab = 'settings';
-    }
-  }
-
-  onApiKeyChange(): void {
-    // Re-check API key status
-    const apiKey = localStorage.getItem('challenge_trainer_api_key');
-    this.hasApiKey = !!apiKey;
-    // Switch to generate tab if key was just added
-    if (apiKey) {
-      this.activeTab = 'generate';
-    }
+    // No initialization needed
   }
 
   onChallengeGenerated(challenge: Challenge): void {
@@ -113,7 +95,7 @@ export class ChallengeContainerComponent implements OnInit {
   runTests(): void {
     const code = this.state.userCode();
     const challenge = this.state.currentChallenge();
-    
+
     if (!challenge) return;
 
     try {
@@ -130,7 +112,7 @@ export class ChallengeContainerComponent implements OnInit {
     const code = this.state.userCode();
     const challenge = this.state.currentChallenge();
     const testResults = this.state.testResults();
-    
+
     if (!challenge) return;
 
     this.state.setValidating(true);
